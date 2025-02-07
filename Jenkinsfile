@@ -20,7 +20,7 @@ pipeline {
         stage('Clone Repository via SSH') {
             steps {
                 sshagent(['github-ssh-key']) {  
-                    sh "git clone git@github.com:your-username/your-repo.git ."
+                    sh "git clone git@github.com:frepinawk/poc.git ."
                 }
             }
         }
