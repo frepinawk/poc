@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "POC"
-        CONTAINER_NAME = "POC-container"
+        IMAGE_NAME = "poc"
+        CONTAINER_NAME = "poc-container"
         PORT = "8000"
         GITHUB_TOKEN = credentials('github-id') // Add your token in Jenkins credentials
     }
