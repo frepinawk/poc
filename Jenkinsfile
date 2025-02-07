@@ -9,16 +9,18 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Clean Workspace') {  // Step to clean the workspace
             steps {
                 script {
+                    sh "rm -rf * .git || true"  // Remove existing files before cloning
+                }
+            }
+        }
 
-                    sh '''
-                    
-                    rm -rf * .git
-                    git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/frepinawk/poc.git .
-
-                    '''
+        stage('Clone Repository via SSH') {
+            steps {
+                sshagent(['github-ssh-key']) {  
+                    sh "git clone git@github.com:your-username/your-repo.git ."
                 }
             }
         }
