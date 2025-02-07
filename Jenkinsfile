@@ -12,8 +12,13 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
+
+                    sh '''
                     
-                    sh "git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/frepinawk/poc.git ."
+                    rm -rf * .git
+                    git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/frepinawk/poc.git .
+
+                    '''
                 }
             }
         }
