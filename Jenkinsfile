@@ -9,14 +9,6 @@ pipeline {
     }
 
     stages {
-        stage('SSH into Local Machine') {
-            steps {
-                sshagent(['poc-id']) {  // Use stored SSH credentials
-                    sh "ssh -o StrictHostKeyChecking=no ttbsadmin@127.0.0.1 'echo Jenkins successfully connected to local machine!'"
-                }
-            }
-        }
-
         stage('Clone Repository') {
             steps {
                 script {
