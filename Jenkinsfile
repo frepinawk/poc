@@ -41,7 +41,7 @@ pipeline {
                   withCredentials([string(credentialsId: 'dockerhub-access-token', variable: 'DOCKERHUB_TOKEN')]) {
 
                         sh '''
-                    echo "${DOCKERHUB_TOKEN}" | docker login -u ${DOCKER_REPO} --password-stdin
+                    echo "${DOCKERHUB_TOKEN}" | docker login -u "${DOCKER_REPO}" --password-stdin
                     docker tag ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION} ${DOCKER_REPO}/${IMAGE_NAME}:latest
                     docker push ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}
                     docker push ${DOCKER_REPO}/${IMAGE_NAME}:latest
