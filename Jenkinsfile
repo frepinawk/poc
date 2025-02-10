@@ -40,7 +40,7 @@ pipeline {
                 script {
                   withCredentials([string(credentialsId: 'dockerhub-access-token', variable: 'DOCKERHUB_TOKEN')]) {
 
-                        sh "docker login -u ${DOCKER_REPO} -p ${DOCKERHUB_TOKEN}"
+                        sh "echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKER_REPO} --password-stdin"
                         sh "docker tag ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION} ${DOCKER_REPO}/${IMAGE_NAME}:latest"
 
                         sh "docker push ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}"
