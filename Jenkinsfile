@@ -1,12 +1,16 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
+    }
+
     environment {
         IMAGE_NAME = "poc"
         CONTAINER_NAME = "poc-container"
         PORT = "8000"
         DOCKER_REPO = "frepino"
-        GITHUB_TOKEN = credentials('github-id') // Add your token in Jenkins credentials
+       // GITHUB_TOKEN = credentials('github-id') // If using https for git cloning , git clone https://${GITHUB_TOKEN}@github.com/frepinawk/poc.git .
         VERSION = "v${BUILD_NUMBER}"
     }
 
@@ -22,7 +26,7 @@ pipeline {
         stage('Clone Repository via SSH') {
             steps {
                 sshagent(['github-ssh-key']) {  
-                    sh "git clone git@github.com:frepinawk/poc.git ."
+                    sh "git clone -b ${params.BRANCH_NAME} git@github.com:frepinawk/poc.git ."
                 }
             }
         }
