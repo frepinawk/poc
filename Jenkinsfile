@@ -5,7 +5,9 @@ pipeline {
         IMAGE_NAME = "poc"
         CONTAINER_NAME = "poc-container"
         PORT = "8000"
+        DOCKER_REPO = "frepino"
         GITHUB_TOKEN = credentials('github-id') // Add your token in Jenkins credentials
+        VERSION = "v${BUILD_NUMBER}"
     }
 
     stages {
@@ -28,10 +30,35 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "docker build -t ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION} ."
                 }
             }
         }
+
+        stage('Pushing The Image To Dockerhub'){
+            steps {
+                script {
+                  withCredentials([string(credentialsId: 'dockerhub-access-token', variable: 'DOCKERHUB_TOKEN')]) {
+
+                        sh "docker login -u ${DOCKER_REPO} -p ${DOCKERHUB_TOKEN}"
+                        sh "docker tag ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION} ${DOCKER_REPO}/${IMAGE_NAME}:latest"
+
+                        sh "docker push ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}"
+                        sh "docker push ${DOCKER_REPO}/${IMAGE_NAME}:latest"
+                    }
+                }
+            }
+
+        }
+
+        stage('Pull Latest Image') {
+            steps {
+                script {
+                        sh "docker pull ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}"
+                }
+            }
+        }
+
 
         stage('Stop & Remove Existing Container') {
             steps {
@@ -45,7 +72,7 @@ pipeline {
         stage('Run New Container') {
             steps {
                 script {
-                    sh "docker run -d -p ${PORT}:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                    sh "docker run -d -p ${PORT}:80 --name ${CONTAINER_NAME} ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}"
                 }
             }
         }
