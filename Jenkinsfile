@@ -15,10 +15,10 @@ pipeline {
     }
 
     stages {
-        stage('Clean Workspace') {  // Step to clean the workspace
+        stage('Clean Workspace') {  
             steps {
                 script {
-                    sh "rm -rf * .git || true"  // Remove existing files before cloning
+                    sh "rm -rf * .git || true"  
                 }
             }
         }
@@ -65,13 +65,30 @@ pipeline {
         }
 
 
-        stage('Stop & Remove Existing Container') {
+        // stage('Stop & Remove Existing Container') {
+        //     steps {
+        //         script {
+        //             sh "docker stop ${CONTAINER_NAME} || true"
+        //             sh "docker rm ${CONTAINER_NAME} || true"
+        //         }
+        //     }
+        // }
+
+        stage('RUN THE DOCKER SWARM SERVICE'){
+
             steps {
+
                 script {
-                    sh "docker stop ${CONTAINER_NAME} || true"
-                    sh "docker rm ${CONTAINER_NAME} || true"
+
+                    '''
+                    docker swarm service rm ${CONTAINER_NAME} || true
+                    docker create service --name ${CONTAINER_NAME} -p ${PORT}:80 ${REPO_NAME}/${IMAGE_NAME}:${VERSION} 
+                    '''
+                
                 }
+
             }
+
         }
 
         stage('Run New Container') {
