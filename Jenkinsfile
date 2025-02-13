@@ -91,12 +91,12 @@ pipeline {
 
         }
 
-        stage('Run New Container') {
-            steps {
-                script {
-                    sh "docker run -d -p ${PORT}:80 --name ${CONTAINER_NAME} ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}"
-                }
-            }
-        }
+        // stage('Run New Container') {
+        //     steps {
+        //         script {
+        //             sh "docker run -d -p ${PORT}:80 --name ${CONTAINER_NAME} ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}"
+        //         }
+        //     }
+        // }
     }
 }
