@@ -65,14 +65,14 @@ pipeline {
         }
 
 
-        stage('Stop & Remove Existing Container') {
-            steps {
-                script {
-                    sh "docker stop ${CONTAINER_NAME} || true"
-                    sh "docker rm ${CONTAINER_NAME} || true"
-                }
-            }
-        }
+        // stage('Stop & Remove Existing Container') {
+        //     steps {
+        //         script {
+        //             sh "docker stop ${CONTAINER_NAME} || true"
+        //             sh "docker rm ${CONTAINER_NAME} || true"
+        //         }
+        //     }
+        // }
 
         stage('RUN THE DOCKER SWARM SERVICE'){
 
@@ -81,8 +81,8 @@ pipeline {
                 script {
 
                     '''
-                    docker swarm service rm ${CONTAINER_NAME} || true
-                    docker create service --name ${CONTAINER_NAME} -p ${PORT}:80 ${REPO_NAME}/${IMAGE_NAME}:${VERSION} 
+                    docker service rm ${CONTAINER_NAME} || true
+                    docker service create --name ${CONTAINER_NAME} -p ${PORT}:80 ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION} 
                     '''
                 
                 }
