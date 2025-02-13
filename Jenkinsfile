@@ -65,14 +65,14 @@ pipeline {
         }
 
 
-        // stage('Stop & Remove Existing Container') {
-        //     steps {
-        //         script {
-        //             sh "docker stop ${CONTAINER_NAME} || true"
-        //             sh "docker rm ${CONTAINER_NAME} || true"
-        //         }
-        //     }
-        // }
+        stage('Stop & Remove Existing Container') {
+            steps {
+                script {
+                    sh "docker stop ${CONTAINER_NAME} || true"
+                    sh "docker rm ${CONTAINER_NAME} || true"
+                }
+            }
+        }
 
         stage('RUN THE DOCKER SWARM SERVICE'){
 
