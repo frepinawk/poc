@@ -80,11 +80,13 @@ pipeline {
 
                 script {
 
-                    '''
-                    docker service rm ${CONTAINER_NAME} || true
-                    docker service create --name ${CONTAINER_NAME} -p ${PORT}:80 ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION} 
-                    '''
-                
+                      sh '''
+                         docker swarm init || true 
+                         docker service rm ${CONTAINER_NAME} || true 
+                         docker service create --name ${CONTAINER_NAME} -p ${PORT}:80 ${DOCKER_REPO}/${IMAGE_NAME}:${VERSION}
+                         
+                       '''
+
                 }
 
             }
